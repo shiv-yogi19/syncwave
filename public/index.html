@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070816">
+<title>SYNCWAVE – Listen Together. Your Way.</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/assets/icon.svg">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div id="aurora"></div><canvas id="parts"></canvas>
+
+<div id="intro">
+  <div class="sweep"></div>
+  <p class="i1">Welcome</p>
+  <p class="i2">Created by</p>
+  <h1 class="i3">SHIV YOGI</h1>
+</div>
+
+<button id="homeBtn" class="icon glass" aria-label="Home" hidden>
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+</button>
+<button id="setBtn" class="icon glass" aria-label="Settings">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+</button>
+
+<main>
+  <section id="home" class="scr">
+    <div class="logo"><svg viewBox="0 0 64 64" width="72" height="72"><g fill="none" stroke="url(#lg)" stroke-width="6" stroke-linecap="round"><defs><linearGradient id="lg"><stop offset="0" stop-color="#9b8cff"/><stop offset="1" stop-color="#3ee6d3"/></linearGradient></defs><path d="M10 32v0M21 22v20M32 12v40M43 22v20M54 32v0"/></g></svg></div>
+    <h2 class="brand">SYNCWAVE</h2>
+    <p class="tag">Listen Together. Your Way.</p>
+    <div class="stack">
+      <button id="create" class="btn primary">Create room</button>
+      <button id="join" class="btn glass">Join room</button>
+    </div>
+    <p class="by">Created by Shiv Yogi</p>
+  </section>
+
+  <section id="joinScr" class="scr" hidden>
+    <div class="card glass">
+      <h2>Enter room code</h2>
+      <input id="code" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" placeholder="000000" aria-label="Room code">
+      <p id="joinErr" class="err"></p>
+      <button id="joinGo" class="btn primary">Join</button>
+    </div>
+  </section>
+
+  <section id="playerScr" class="scr" hidden>
+    <div class="card glass player">
+      <div class="row top">
+        <span id="roleTag" class="pill"></span>
+        <span id="status" class="pill st">Connecting</span>
+      </div>
+      <div class="room">
+        <div><small>Room code</small><b id="roomCode">------</b></div>
+        <div class="acts"><button id="copy" class="btn sm glass">Copy</button><button id="share" class="btn sm glass">Share</button></div>
+      </div>
+      <p id="count" class="mm">0 listeners</p>
+      <p id="mconn" class="ml">Master connected</p>
+      <div id="art"><div class="ring"></div></div>
+      <h3 id="title">No song selected</h3>
+      <p id="fileName" class="sub"></p>
+      <canvas id="viz"></canvas>
+      <p id="wait" class="sub"></p>
+      <div class="prog"><span id="cur">0:00</span><input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek"><span id="dur">0:00</span></div>
+      <p id="pstate" class="sub"></p>
+
+      <div class="mm">
+        <input id="file" type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.webm" hidden>
+        <button id="pick" class="btn glass wide">Select song</button>
+        <div class="ctl">
+          <button id="back" class="icon glass" aria-label="Back 10 seconds">−10</button>
+          <button id="play" class="icon big primary" aria-label="Play">▶</button>
+          <button id="fwd" class="icon glass" aria-label="Forward 10 seconds">+10</button>
+          <button id="stopBtn" class="icon glass" aria-label="Stop">■</button>
+        </div>
+        <label class="vol">Volume <output id="volLbl">100%</output><input id="vol" type="range" min="0" max="200" value="100"></label>
+        <button id="closeRoom" class="btn danger wide">Close room</button>
+      </div>
+
+      <div class="ml">
+        <p class="banner">Master is controlling playback</p>
+        <p class="sub">Volume <span id="lvol">100%</span></p>
+        <button id="stopListen" class="btn glass wide">Stop listening</button>
+      </div>
+      <button id="tap" class="tap" hidden>Tap to start listening</button>
+    </div>
+  </section>
+
+  <section id="endScr" class="scr" hidden>
+    <div class="card glass">
+      <h2 id="endTitle">Room closed</h2>
+      <p id="endMsg" class="sub">The Master has ended this room.</p>
+      <button id="endHome" class="btn primary">Home</button>
+    </div>
+  </section>
+</main>
+
+<dialog id="cfm" class="glass"><h3>Close this room?</h3><p class="sub">Every listener will be disconnected.</p><div class="row"><button id="cfmNo" class="btn glass">Keep playing</button><button id="cfmYes" class="btn danger">Close room</button></div></dialog>
+
+<dialog id="setDlg" class="glass">
+  <h3>Settings</h3>
+  <h4>Appearance</h4>
+  <label>Glass intensity<input id="sOp" type="range" min="4" max="30" value="10"></label>
+  <label>Blur<input id="sBl" type="range" min="4" max="48" value="24"></label>
+  <label>Glow<input id="sGl" type="range" min="0" max="100" value="50"></label>
+  <label class="chk"><input id="sBg" type="checkbox" checked> Background animation</label>
+  <label class="chk"><input id="sPa" type="checkbox" checked> Particles</label>
+  <h4>Visualizer</h4>
+  <label>Style<select id="sSt"><option value="bars">Bars</option><option value="wave">Wave</option><option value="circular">Circular</option><option value="spectrum">Spectrum</option><option value="pulse">Pulse</option></select></label>
+  <label>Sensitivity<input id="sSe" type="range" min="20" max="300" value="100"></label>
+  <label>Intensity<input id="sIn" type="range" min="20" max="200" value="100"></label>
+  <label class="chk"><input id="sVi" type="checkbox" checked> Visualizer enabled</label>
+  <h4>Performance</h4>
+  <label class="chk"><input id="sPf" type="checkbox"> Performance mode</label>
+  <label class="chk"><input id="sRe" type="checkbox"> Reduced effects</label>
+  <label class="chk"><input id="sLo" type="checkbox"> Low-power mode</label>
+  <h4>Audio</h4>
+  <p class="sub">Output latency: <span id="lat">n/a</span></p>
+  <button id="setClose" class="btn primary wide">Done</button>
+</dialog>
+
+<div id="toast" role="status"></div>
+<div id="wm" aria-hidden="true">SHIV YOGI</div>
+<script src="/app.js"></script>
+</body>
+</html>
